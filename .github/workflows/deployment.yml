@@ -11,18 +11,8 @@ jobs:
     steps:
       - name: Clone Project
         uses: actions/checkout@v5
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: Install dependencies
-        run: pnpm install
+      - name: load & cache dependencies
+        uses: ./.github/actions/cache-deps
       - name: lint the project
         run: pnpm run lint
 
@@ -32,18 +22,7 @@ jobs:
     steps:
       - name: Clone Project
         uses: actions/checkout@v5
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{ hashFiles('**/pnpm-lock.yaml') }}
-      - name: Install dependencies
-        if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}}
-        run: pnpm install
+      - name: load & cache dependencies
+        uses: ./github/actions/cache-deps
       - name: lint the project
         run: pnpm run build
