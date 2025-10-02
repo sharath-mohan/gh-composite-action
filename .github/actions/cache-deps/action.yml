@@ -4,6 +4,10 @@ inputs:
   enable-caching:
     description: "Toggle to enable caching"
     required: false
+outputs:
+   used-cache:
+      description: "indicates if cache was used"
+      value: ${{ steps.install.outputs.cache-node-modules }}
 runs:
   using: "composite"
   steps:
@@ -19,6 +23,9 @@ runs:
         path: node_modules
         key: ${{ hashFiles('**/pnpm-lock.yaml') }}
     - name: Install dependencies
+      id: install
       if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}} || ${{  inputs.enable-caching != 'true'}}
-      run: pnpm install
+      run: |
+      pnpm install
+      echo "cache='${{inputs.enable-caching}}'" >> $GITHUB_OUTPUT
       shell: bash #extra step
