@@ -1,10 +1,15 @@
 name: "Get and Cache dependencies"
 description: "Get the dependencies via pnpm and cache item"
+inputs:
+  enable-caching:
+    description: "Toggle to enable caching"
+    required: false
 runs:
   using: "composite"
   steps:
     - name: Install pnpm
       uses: pnpm/action-setup@v4
+      if: ${{ inputs.enable-caching == 'true' }}
       with:
         version: 10
     - name: Cache node_modules
@@ -14,6 +19,6 @@ runs:
         path: node_modules
         key: ${{ hashFiles('**/pnpm-lock.yaml') }}
     - name: Install dependencies
-      if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}}
+      if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}} || ${{  inputs.enable-caching == 'true'}}
       run: pnpm install
       shell: bash #extra step
