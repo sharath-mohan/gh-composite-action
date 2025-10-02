@@ -23,6 +23,6 @@ jobs:
       - name: Clone Project
         uses: actions/checkout@v5
       - name: load & cache dependencies
-        uses: ./github/actions/cache-deps
-      - name: lint the project
+        uses: ./.github/actions/cache-deps
+      - name: build the project
         run: pnpm run build
