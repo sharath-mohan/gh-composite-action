@@ -5,9 +5,9 @@ inputs:
     description: "Toggle to enable caching"
     required: false
 outputs:
-   used-cache:
-      description: "indicates if cache was used"
-      value: ${{ steps.install.outputs.cache }}
+  used-cache:
+    description: "indicates if cache was used"
+    value: ${{ steps.install.outputs.cache }}
 runs:
   using: "composite"
   steps:
@@ -26,6 +26,6 @@ runs:
       id: install
       if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}} || ${{  inputs.enable-caching != 'true'}}
       run: |
-      pnpm install
-      echo "cache='${{inputs.enable-caching}}'" >> $GITHUB_OUTPUT
+        pnpm install
+        echo "cache='${{inputs.enable-caching}}'" >> $GITHUB_OUTPUT
       shell: bash #extra step
