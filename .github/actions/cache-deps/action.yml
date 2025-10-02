@@ -9,16 +9,16 @@ runs:
   steps:
     - name: Install pnpm
       uses: pnpm/action-setup@v4
-      if: ${{ inputs.enable-caching == 'true' }}
       with:
         version: 10
     - name: Cache node_modules
+      if: ${{ inputs.enable-caching == 'true' }}
       uses: actions/cache@v4
       id: cache-node-modules
       with:
         path: node_modules
         key: ${{ hashFiles('**/pnpm-lock.yaml') }}
     - name: Install dependencies
-      if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}} || ${{  inputs.enable-caching == 'true'}}
+      if: ${{steps.cache-node-modules.outputs.cache-hit != 'true'}} || ${{  inputs.enable-caching != 'true'}}
       run: pnpm install
       shell: bash #extra step
